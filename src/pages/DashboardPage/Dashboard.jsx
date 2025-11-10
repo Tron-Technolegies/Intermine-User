@@ -3,6 +3,7 @@ import { FiCpu, FiTool, FiZap, FiActivity } from "react-icons/fi";
 import StatCard from "../../components/dashboard/StatCard";
 import IssueCard from "../../components/dashboard/IssueCard";
 import MinerCard from "../../components/myminers/MinerCard";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const stats = [
@@ -95,7 +96,9 @@ export default function Dashboard() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-slate-800">Your Miners</h2>
-            <p className="text-sm text-indigo-600 cursor-pointer">View all</p>
+            <Link to={"/my-miners"} className="text-sm text-indigo-600 cursor-pointer">
+              View all
+            </Link>
           </div>
 
           {miners.length ? (
@@ -113,7 +116,9 @@ export default function Dashboard() {
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-slate-800">Issue History</h2>
-            <p className="text-sm text-indigo-600 cursor-pointer">View all</p>
+            <Link to={"/total-history"} className="text-sm text-indigo-600 cursor-pointer">
+              View all
+            </Link>
           </div>
 
           {issues.length ? (

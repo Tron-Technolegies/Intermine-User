@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { LuMail } from "react-icons/lu";
+import { IoChevronDown } from "react-icons/io5";
 
 export default function Header() {
   const location = useLocation();
@@ -73,6 +74,13 @@ export default function Header() {
             <p className="text-sm font-medium">Jack Wilder</p>
             <p className="text-xs text-slate-500">Administrator</p>
           </div>
+
+          {/* Dropdown arrow icon */}
+          <IoChevronDown
+            className={`w-4 h-4 text-slate-500 transition-transform ${
+              showProfileMenu ? "rotate-180" : ""
+            }`}
+          />
 
           {showProfileMenu && (
             <div className="absolute right-0 top-12 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-2 z-50">
