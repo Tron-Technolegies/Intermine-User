@@ -84,16 +84,16 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((item, i) => (
           <StatCard key={i} {...item} />
         ))}
       </div>
 
       {/* Miners & Issues */}
-      <div className="flex flex-col md:flex-row xl:flex-cols-4 gap-6">
+      <div className="flex flex-col xl:flex-row gap-6">
         {/* Miners Section */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 w-full xl:w-2/3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-slate-800">Your Miners</h2>
             <Link to={"/my-miners"} className="text-sm text-indigo-600 cursor-pointer">
@@ -102,9 +102,11 @@ export default function Dashboard() {
           </div>
 
           {miners.length ? (
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {miners.map((miner, i) => (
-                <MinerCard key={i} miner={miner} />
+                <div key={i} className="w-full sm:w-[calc(50%-0.5rem)]">
+                  <MinerCard miner={miner} />
+                </div>
               ))}
             </div>
           ) : (
@@ -113,7 +115,7 @@ export default function Dashboard() {
         </div>
 
         {/* Issues Section */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 w-full xl:w-1/3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-slate-800">Issue History</h2>
             <Link to={"/total-history"} className="text-sm text-indigo-600 cursor-pointer">
