@@ -11,13 +11,16 @@ export default function Agreement() {
   ];
 
   return (
-    <div className="p-6 space-y-4 bg-white rounded-lg min-h-screen">
-      <h1 className="text-2xl font-semibold mb-4">My Agreements</h1>
-      {agreements.map((item) => (
-        <div key={item.id} onClick={() => setSelectedAgreement(item)}>
-          <AgreementCard title={item.title} date={item.date} />
-        </div>
-      ))}
+    <div className="p-4 sm:p-6 space-y-4 bg-white rounded-lg min-h-screen">
+      <h1 className="text-xl sm:text-2xl font-semibold mb-4">My Agreements</h1>
+
+      <div className="space-y-3">
+        {agreements.map((item) => (
+          <div key={item.id} onClick={() => setSelectedAgreement(item)}>
+            <AgreementCard title={item.title} date={item.date} />
+          </div>
+        ))}
+      </div>
 
       {selectedAgreement && (
         <AgreementModal agreement={selectedAgreement} onClose={() => setSelectedAgreement(null)} />

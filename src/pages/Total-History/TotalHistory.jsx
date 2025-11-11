@@ -4,9 +4,9 @@ import RepairAllHistory from "../../components/total-history/RepairAllHistory";
 
 export default function TotalHistory() {
   return (
-    <div className=" ">
+    <div className="p-4 sm:p-6 space-y-6">
       <RepairHistoryCard />
-      <div className="mt-6">
+      <div>
         <RepairAllHistory />
       </div>
     </div>

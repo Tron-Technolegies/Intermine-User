@@ -39,11 +39,12 @@ const miners = [
 
 export default function MyMiners() {
   return (
-    <section className="p-6 min-h-screen bg-white rounded-lg">
-      <div className="flex justify-between items-center mb-4">
+    <section className="p-4 sm:p-6 min-h-screen bg-white rounded-lg">
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
         <h2 className="font-semibold text-lg text-gray-800">Your Miners</h2>
       </div>
-      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6  ">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {miners.map((miner, i) => (
           <MinerCard key={i} miner={miner} />
         ))}

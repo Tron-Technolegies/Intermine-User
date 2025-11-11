@@ -1,20 +1,25 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { FiGrid, FiCpu, FiClock, FiFileText } from "react-icons/fi";
+import { FiCpu, FiFileText } from "react-icons/fi";
 import { PiChartPieSliceFill } from "react-icons/pi";
 import { RiHistoryFill } from "react-icons/ri";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen }) {
   const location = useLocation();
+
   return (
-    <div className="bg-white h-screen border-r border-slate-200 flex flex-col transition-all duration-300 w-20 md:w-64">
+    <div
+      className={`fixed lg:static top-0 left-0 h-screen bg-white border-r border-slate-200 flex flex-col transform transition-all duration-500 ease-in-out z-50
+      ${isOpen ? "translate-x-0 w-64 shadow-2xl" : "-translate-x-full w-64 lg:translate-x-0"}
+      lg:w-64`}
+    >
       {/* Logo */}
-      <div className="p-4 border-b border-slate-200 flex justify-center md:justify-start">
-        <img src="/sidebar-logo.png" alt="intermine-logo" className="w-10 md:w-full md:block" />
+      <div className="p-4 border-b border-slate-200 flex items-center justify-start gap-2">
+        <img src="/sidebar-logo.png" alt="intermine-logo" className="items-center p-2 w-full" />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 md:p-4 space-y-4">
+      <nav className="flex-1 p-4 space-y-3">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
@@ -26,7 +31,7 @@ export default function Sidebar() {
           }
         >
           <PiChartPieSliceFill className="w-6 h-6" />
-          <span className="hidden md:inline">Overview</span>
+          <span>Overview</span>
         </NavLink>
 
         <NavLink
@@ -40,7 +45,7 @@ export default function Sidebar() {
           }
         >
           <FiCpu className="w-6 h-6" />
-          <span className="hidden md:inline">My Miners</span>
+          <span>My Miners</span>
         </NavLink>
 
         <NavLink
@@ -54,7 +59,7 @@ export default function Sidebar() {
           }
         >
           <RiHistoryFill className="w-6 h-6" />
-          <span className="hidden md:inline">Total History</span>
+          <span>Total History</span>
         </NavLink>
 
         <NavLink
@@ -68,7 +73,7 @@ export default function Sidebar() {
           }
         >
           <FiFileText className="w-6 h-6" />
-          <span className="hidden md:inline">Agreement</span>
+          <span>Agreement</span>
         </NavLink>
       </nav>
     </div>

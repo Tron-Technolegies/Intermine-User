@@ -18,20 +18,21 @@ export default function RepairHistoryCard() {
   ];
 
   return (
-    <div className="p-5 bg-white rounded-lg ">
-      <h1 className="font-semibold text-lg text-black">Repair Status</h1>
-      <p className="text-[#545659] text-sm">
+    <div className="p-4 sm:p-5 bg-white rounded-lg shadow-sm">
+      <h1 className="font-semibold text-lg sm:text-xl text-black">Repair Status</h1>
+      <p className="text-[#545659] text-sm sm:text-base mt-1">
         Complete maintenance and repair records for all your mining equipments
       </p>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-5 p-4">
+      {/* Stats grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-5 p-3 sm:p-4">
         {stats.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center justify-center bg-[#F7F8F9] p-2 border border-[#EEF1F4] hover:bg-[#EEF1F4] transition"
+            className="flex flex-col items-center justify-center bg-[#F7F8F9] p-2 sm:p-3 border border-[#EEF1F4] rounded-lg hover:bg-[#EEF1F4] transition"
           >
-            <p className="text-gray-700 font-medium text-sm">{item.label}</p>
-            <p className="text-lg font-semibold text-gray-600">{item.value}</p>
+            <p className="text-gray-700 font-medium text-xs sm:text-sm text-center">{item.label}</p>
+            <p className="text-base sm:text-lg font-semibold text-gray-600 mt-1">{item.value}</p>
           </div>
         ))}
       </div>
