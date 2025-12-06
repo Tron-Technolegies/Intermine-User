@@ -1,20 +1,17 @@
 import React from "react";
+import useIssueStats from "../../hooks/issues/useIssueStats";
 
 export default function RepairHistoryCard() {
-  const history = {
-    totalrepair: 5,
-    completed: 3,
-    inprogress: 1,
-    warranty: 2,
-    repair: 1,
-  };
+  const { data, isLoading } = useIssueStats();
+
+  if (isLoading) return <p>Loading...</p>;
 
   const stats = [
-    { label: "Total Repair", value: history.totalrepair },
-    { label: "Completed", value: history.completed },
-    { label: "In Progress", value: history.inprogress },
-    { label: "Warranty", value: history.warranty },
-    { label: "Repair", value: history.repair },
+    { label: "Total Issues", value: data?.allIssues || 0 },
+    { label: "Completed", value: data?.resolved || 0 },
+    { label: "In Progress", value: data?.pending || 0 },
+    { label: "Warranty Issues", value: data?.warranty || 0 },
+    { label: "Repair Issues", value: data?.repair || 0 },
   ];
 
   return (
@@ -24,7 +21,6 @@ export default function RepairHistoryCard() {
         Complete maintenance and repair records for all your mining equipments
       </p>
 
-      {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-5 p-3 sm:p-4">
         {stats.map((item, index) => (
           <div

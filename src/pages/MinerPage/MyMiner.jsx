@@ -1,43 +1,12 @@
 import React from "react";
 import MinerCard from "../../components/myminers/MinerCard";
-
-const miners = [
-  {
-    name: "Antminer S19 Pro",
-    serial: "ASI9P-240001",
-    status: "Online",
-    hashrate: "110 TH/s",
-    power: "3250W",
-    warranty: "129 days remaining",
-    worker: "demo_user.worker001",
-    pool: "slushpool.com:4444",
-    purchased: "15/01/2025",
-  },
-  {
-    name: "Antminer S19 Pro",
-    serial: "ASI9P-240002",
-    status: "Repair",
-    hashrate: "95 TH/s",
-    power: "3100W",
-    warranty: "80 days remaining",
-    worker: "demo_user.worker002",
-    pool: "btcminerpool.com:3333",
-    purchased: "12/01/2025",
-  },
-  {
-    name: "Antminer S19 Pro",
-    serial: "ASI9P-240002",
-    status: "Repair",
-    hashrate: "95 TH/s",
-    power: "3100W",
-    warranty: "80 days remaining",
-    worker: "demo_user.worker002",
-    pool: "btcminerpool.com:3333",
-    purchased: "12/01/2025",
-  },
-];
+import useClientMiners from "../../hooks/useClientMiners";
 
 export default function MyMiners() {
+  const { data: miners = [], isLoading, isError } = useClientMiners();
+
+  if (isLoading) return <p className="p-5">Loading miners...</p>;
+  if (isError) return <p className="p-5 text-red-500">Failed to load miners</p>;
   return (
     <section className="p-4 sm:p-6 min-h-screen bg-white rounded-lg">
       <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
@@ -46,7 +15,7 @@ export default function MyMiners() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {miners.map((miner, i) => (
-          <MinerCard key={i} miner={miner} />
+          <MinerCard key={miner._id} miner={miner} />
         ))}
       </div>
     </section>

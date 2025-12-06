@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 import HomeLayout from "./components/Layout/HomeLayout";
 import ErrorPage from "./pages/error/ErrorPage";
@@ -15,23 +11,40 @@ import Agreement from "./pages/Agreement/Agreement";
 import Login from "./components/Login/Login";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/login" element={<Login />} errorElement={<ErrorPage />} />
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import VerifyOtpPage from "./pages/auth/VerifyOtpPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
-      <Route path="/" element={<HomeLayout />} errorElement={<ErrorPage />}>
-        <Route index element={<Dashboard />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="my-miners" element={<MyMiner />} />
-        <Route path="total-history" element={<TotalHistory />} />
-        <Route path="agreement" element={<Agreement />} />
-        <Route path="profile-settings" element={<ProfileSettings />} />
-      </Route>
-    </>
-  )
-);
+import { ToastContainer } from "react-toastify";
+
+const router = createBrowserRouter([
+  // PUBLIC ROUTES
+  { path: "/login", element: <Login />, errorElement: <ErrorPage /> },
+  { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/verify-otp", element: <VerifyOtpPage /> },
+  { path: "/reset-password", element: <ResetPasswordPage /> },
+
+  // PROTECTED LAYOUT ROUTES
+  {
+    path: "/",
+    element: <HomeLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "my-miners", element: <MyMiner /> },
+      { path: "total-history", element: <TotalHistory /> },
+      { path: "agreement", element: <Agreement /> },
+      { path: "profile-settings", element: <ProfileSettings /> },
+    ],
+  },
+]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+      <RouterProvider router={router} />
+    </>
+  );
 }

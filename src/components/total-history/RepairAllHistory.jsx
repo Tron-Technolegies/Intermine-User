@@ -1,83 +1,19 @@
 import React, { useState } from "react";
 import { CiCalendar } from "react-icons/ci";
 import { BsCheckCircle } from "react-icons/bs";
+import { LuMessagesSquare } from "react-icons/lu";
+import useUserIssues from "../../hooks/issues/useUserIssues";
+import IssueMessagesModal from "./IssueMessagesModal";
+import { MdOutlineChat } from "react-icons/md";
 
 export default function RepairAllHistory() {
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("ALL");
+  const [selectedIssue, setSelectedIssue] = useState(null);
 
-  const historyData = [
-    {
-      id: "#TKT-A1B2C3",
-      miner: "Antminer S19 Pro",
-      issue: "Overheating",
-      description: "Temperature consistently above 70°C",
-      reported: "08/12/2024",
-      resolved: "09/12/2024",
-      worker: "demo_user.worker001",
-      pool: "slushpool.com:4444",
-      purchased: "15/01/2025",
-      poolChanged: "15/02/2025",
-      status: "resolved",
-    },
-    {
-      id: "#TKT-A1B2C4",
-      miner: "Antminer S19 Pro",
-      issue: "Overheating",
-      description: "Temperature consistently above 70°C",
-      reported: "08/12/2024",
-      resolved: "-",
-      worker: "demo_user.worker001",
-      pool: "slushpool.com:4444",
-      purchased: "15/01/2025",
-      poolChanged: "15/02/2025",
-      status: "in progress",
-    },
-    {
-      id: "#TKT-A1B2C4",
-      miner: "Antminer S19 Pro",
-      issue: "Overheating",
-      description: "Temperature consistently above 70°C",
-      reported: "08/12/2024",
-      resolved: "-",
-      worker: "demo_user.worker001",
-      pool: "slushpool.com:4444",
-      purchased: "15/01/2025",
-      poolChanged: "15/02/2025",
-      status: "in progress",
-    },
-    {
-      id: "#TKT-A1B2C4",
-      miner: "Antminer S19 Pro",
-      issue: "Overheating",
-      description: "Temperature consistently above 70°C",
-      reported: "08/12/2024",
-      resolved: "-",
-      worker: "demo_user.worker001",
-      pool: "slushpool.com:4444",
-      purchased: "15/01/2025",
-      poolChanged: "15/02/2025",
-      status: "in progress",
-    },
-    {
-      id: "#TKT-A1B2C4",
-      miner: "Antminer S19 Pro",
-      issue: "Overheating",
-      description: "Temperature consistently above 70°C",
-      reported: "08/12/2024",
-      resolved: "-",
-      worker: "demo_user.worker001",
-      pool: "slushpool.com:4444",
-      purchased: "15/01/2025",
-      poolChanged: "15/02/2025",
-      status: "in progress",
-    },
-  ];
+  const { data, isLoading } = useUserIssues(filter);
+  const issues = data?.issues || [];
 
-  // Filter logic
-  const filteredData =
-    filter === "All"
-      ? historyData
-      : historyData.filter((item) => item.status === filter.toLowerCase());
+  if (isLoading) return <p className="text-gray-500 text-sm">Loading...</p>;
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
@@ -87,7 +23,7 @@ export default function RepairAllHistory() {
 
         {/* Filter buttons */}
         <div className="flex items-center gap-1 sm:gap-2 bg-[#F5F6F7] p-1 rounded-lg overflow-x-auto scrollbar-hide">
-          {["All", "Resolved", "In Progress"].map((item) => (
+          {["ALL", "Resolved", "Pending"].map((item) => (
             <button
               key={item}
               onClick={() => setFilter(item)}
@@ -103,7 +39,7 @@ export default function RepairAllHistory() {
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
-        {filteredData.map((data, i) => (
+        {issues.map((item, i) => (
           <div
             key={i}
             className="border border-gray-200 rounded-lg p-4 bg-[#F9F9FA] hover:shadow-md transition"
@@ -113,19 +49,22 @@ export default function RepairAllHistory() {
               <div className="flex items-center gap-2">
                 <BsCheckCircle
                   className={`text-lg ${
-                    data.status === "resolved" ? "text-green-500" : "text-yellow-500"
+                    item.status.toLowerCase() === "resolved" ? "text-green-500" : "text-yellow-500"
                   }`}
                 />
-                <p className="font-semibold text-gray-800 text-sm sm:text-base">{data.id}</p>
+                <p className="font-semibold text-gray-800 text-sm sm:text-base">
+                  #{item._id.slice(-6)}
+                </p>
               </div>
+
               <span
                 className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-medium ${
-                  data.status === "resolved"
+                  item.status.toLowerCase() === "resolved"
                     ? "bg-green-100 text-green-600"
                     : "bg-yellow-100 text-yellow-600"
                 }`}
               >
-                {data.status}
+                {item.status}
               </span>
             </div>
 
@@ -133,21 +72,31 @@ export default function RepairAllHistory() {
 
             {/* Miner Info */}
             <div className="mt-2">
-              <p className="font-semibold text-gray-800 text-sm sm:text-base">{data.miner}</p>
+              <p className="font-semibold text-gray-800 text-sm sm:text-base">
+                {item.type === "change" ? "Pool/Worker Change" : "Repair Issue"}
+              </p>
+
               <p className="text-xs sm:text-sm text-gray-600">
-                {data.issue} — {data.description}
+                {item.type === "change"
+                  ? `Worker: ${item.changeRequest?.worker}, Pool: ${item.changeRequest?.pool}`
+                  : item.description || "No description"}
               </p>
             </div>
 
-            {/* Dates */}
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-3 text-[11px] sm:text-xs text-gray-500 mt-3 border-t border-gray-200 pt-2">
+            {/* Dates + Message Icon */}
+            <div className="flex justify-between items-center text-[11px] sm:text-xs text-gray-500 mt-3 border-t border-gray-200 pt-2">
               <div className="flex items-center gap-1">
-                <CiCalendar className="text-gray-400" /> Reported: {data.reported}
+                <CiCalendar className="text-gray-400" />{" "}
+                {new Date(item.createdAt).toLocaleDateString()}
               </div>
-              {data.resolved && data.resolved !== "-" && (
-                <div className="flex items-center gap-1">
-                  <CiCalendar className="text-gray-400" /> Resolved: {data.resolved}
-                </div>
+
+              {item.messages?.length > 0 && (
+                <button
+                  onClick={() => setSelectedIssue(item._id)}
+                  className="text-greay-300 hover:text-gray-600 transition"
+                >
+                  <MdOutlineChat size={18} />
+                </button>
               )}
             </div>
           </div>
@@ -155,8 +104,13 @@ export default function RepairAllHistory() {
       </div>
 
       {/* Empty State */}
-      {filteredData.length === 0 && (
-        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">No records found.</p>
+      {!isLoading && issues.length === 0 && (
+        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">No history found.</p>
+      )}
+
+      {/* Messages Modal */}
+      {selectedIssue && (
+        <IssueMessagesModal issueId={selectedIssue} onClose={() => setSelectedIssue(null)} />
       )}
     </div>
   );
