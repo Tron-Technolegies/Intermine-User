@@ -1,29 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../api/api";
 import AgreementCard from "../../components/agreement/AgreementCard";
 import AgreementModal from "../../components/agreement/AgreementModal";
+import { toast } from "react-toastify";
 
-export default function Agreement() {
+export default function AgreementPage() {
+  const [agreements, setAgreements] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedAgreement, setSelectedAgreement] = useState(null);
 
-  const agreements = [
-    { id: 1, title: "Mining Agreement V1", date: "12 Sept 2025" },
-    { id: 2, title: "Purchase Agreement V1", date: "12 Sept 2025" },
-  ];
+  // Fetch agreements
+  const getUserAgreements = async () => {
+    try {
+      const res = await api.get("/agreement/user", { withCredentials: true });
+      setAgreements(res.data.agreements || []);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load agreements.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUserAgreements();
+  }, []);
 
   return (
-    <div className="p-4 sm:p-6 space-y-4 bg-white rounded-lg min-h-screen">
-      <h1 className="text-xl sm:text-2xl font-semibold mb-4">My Agreements</h1>
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-semibold">Your Agreements</h1>
 
-      <div className="space-y-3">
-        {agreements.map((item) => (
-          <div key={item.id} onClick={() => setSelectedAgreement(item)}>
-            <AgreementCard title={item.title} date={item.date} />
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <p>Loading agreements...</p>
+      ) : agreements.length === 0 ? (
+        <p>No agreements found.</p>
+      ) : (
+        agreements.map((ag) => (
+          <AgreementCard key={ag._id} agreement={ag} onOpen={() => setSelectedAgreement(ag)} />
+        ))
+      )}
 
+      {/* Modal */}
       {selectedAgreement && (
-        <AgreementModal agreement={selectedAgreement} onClose={() => setSelectedAgreement(null)} />
+        <AgreementModal
+          agreement={selectedAgreement}
+          onClose={() => {
+            setSelectedAgreement(null);
+            getUserAgreements(); // refresh list after signing
+          }}
+        />
       )}
     </div>
   );

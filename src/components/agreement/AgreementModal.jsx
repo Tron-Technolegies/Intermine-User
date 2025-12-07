@@ -1,10 +1,13 @@
 import React, { useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import SignatureCanvas from "react-signature-canvas";
+import api from "../../api/api";
+import { toast } from "react-toastify";
 
 export default function AgreementModal({ agreement, onClose }) {
   const sigRef = useRef();
   const [signed, setSigned] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleClear = () => sigRef.current.clear();
 
@@ -14,16 +17,51 @@ export default function AgreementModal({ agreement, onClose }) {
       console.log("Signature saved:", signature);
       setSigned(true);
 
-      // Close modal after signing (optional)
       setTimeout(() => onClose(), 1200);
     }
   };
-  const handleSubmitSignature = () => {
-    if (!sigRef.current.isEmpty()) {
-      const signature = sigRef.current.toDataURL();
-      console.log("Signature saved:", signature);
+
+  const handleSubmitSignature = async () => {
+    if (!isChecked) {
+      toast.error("Please agree to the terms and conditions before signing.");
+      return;
+    }
+
+    if (sigRef.current.isEmpty()) {
+      toast.error("Please provide your signature before submitting.");
+      return;
+    }
+
+    if (!agreement?._id) {
+      toast.error("Agreement ID missing. Please refresh and try again.");
+      return;
+    }
+
+    const signature = sigRef.current.toDataURL();
+
+    try {
+      const res = await api.patch(
+        "/agreement/sign",
+        {
+          agreementId: agreement._id,
+          signature,
+        },
+        { withCredentials: true }
+      );
+
+      toast.success("Agreement signed successfully!");
       setSigned(true);
-      setTimeout(() => onClose(), 1200);
+
+      setTimeout(() => {
+        onClose();
+      }, 1200);
+    } catch (error) {
+      const msg =
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        "Error signing agreement.";
+
+      toast.error(msg);
     }
   };
 
@@ -175,8 +213,13 @@ export default function AgreementModal({ agreement, onClose }) {
 
               {/* Checkbox */}
               <label className="flex items-center gap-2 mt-6 text-sm text-gray-700">
-                <input type="checkbox" className="w-4 h-4 rounded border-gray-400" />I confirm that
-                I have read, understood, and agree to all terms and conditions.
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={(e) => setIsChecked(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-400"
+                />
+                I confirm that I have read, understood, and agree to all terms and conditions.
               </label>
             </div>
 
