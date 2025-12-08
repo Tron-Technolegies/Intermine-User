@@ -8,7 +8,12 @@ import api from "../../api/api";
 import { useNotificationContext } from "../../NotificationContext";
 
 export default function Header({ onMenuToggle }) {
-  const { data: notifications = [], isLoading, clearOne, clearAll } = useNotificationContext();
+  const {
+    data: notifications = [],
+    isLoading,
+    clearOne,
+    clearAll,
+  } = useNotificationContext();
 
   const unreadCount = notifications.length;
 
@@ -48,7 +53,10 @@ export default function Header({ onMenuToggle }) {
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(e.target)
+      ) {
         setShowNotification(false);
       }
       if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -65,7 +73,9 @@ export default function Header({ onMenuToggle }) {
         <button className="block lg:hidden" onClick={onMenuToggle}>
           <RxHamburgerMenu className="w-6 h-6 text-slate-700" />
         </button>
-        <h1 className="text-xl font-semibold text-slate-800">{getPageTitle()}</h1>
+        <h1 className="text-xl font-semibold text-slate-800">
+          {getPageTitle()}
+        </h1>
       </div>
 
       <div className="flex items-center gap-6">
@@ -85,7 +95,9 @@ export default function Header({ onMenuToggle }) {
             <div className="absolute right-0 mt-3 w-96 bg-white shadow-xl rounded-xl border border-slate-200 z-50">
               {/* HEADER */}
               <div className="flex justify-between items-center px-4 py-3 border-b bg-slate-50 rounded-t-xl">
-                <p className="text-sm font-semibold text-slate-800">Notifications</p>
+                <p className="text-sm font-semibold text-slate-800">
+                  Notifications
+                </p>
 
                 {unreadCount > 0 && (
                   <button
@@ -104,17 +116,19 @@ export default function Header({ onMenuToggle }) {
                     Loading notifications...
                   </p>
                 ) : notifications.length === 0 ? (
-                  <p className="text-center text-sm text-slate-500 py-3">No new notifications</p>
+                  <p className="text-center text-sm text-slate-500 py-3">
+                    No new notifications
+                  </p>
                 ) : (
                   notifications.map((item) => (
                     <li
-                      key={item._id}
+                      key={item?._id}
                       className="p-3 bg-slate-50 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-100 transition"
                     >
                       {/* TITLE + CLEAR ONE */}
                       <div className="flex justify-between items-start">
                         <p className="text-sm font-medium text-slate-800">
-                          {item.title || "Notification"}
+                          {item?.problem || "Notification"}
                         </p>
 
                         <button
@@ -126,9 +140,6 @@ export default function Header({ onMenuToggle }) {
                       </div>
 
                       {/* MESSAGE CONTENT */}
-                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                        {item.description || item.message || "No message content"}
-                      </p>
 
                       {/* DATE */}
                       <p className="text-[10px] text-slate-400 mt-2">

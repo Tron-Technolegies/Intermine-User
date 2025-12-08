@@ -13,13 +13,16 @@ export default function useNotifications() {
       });
       return res.data || [];
     },
-    refetchInterval: 5000, // auto-refresh every 5 seconds
   });
 
   // CLEAR ONE NOTIFICATION
   const clearOne = useMutation({
     mutationFn: async (id) => {
-      return await api.patch(`/notification/user/${id}`, {}, { withCredentials: true });
+      return await api.patch(
+        `/notification/user/${id}`,
+        {},
+        { withCredentials: true }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["notifications"]);
@@ -29,7 +32,11 @@ export default function useNotifications() {
   // CLEAR ALL NOTIFICATIONS
   const clearAll = useMutation({
     mutationFn: async () => {
-      return await api.patch("/notification/user/all", {}, { withCredentials: true });
+      return await api.patch(
+        "/notification/user/all",
+        {},
+        { withCredentials: true }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["notifications"]);

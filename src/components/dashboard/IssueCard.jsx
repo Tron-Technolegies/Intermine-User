@@ -9,7 +9,9 @@ export default function IssueCard({ issue }) {
     <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition">
       {/* Top Row */}
       <div className="flex justify-between items-center mb-1">
-        <p className="font-semibold text-slate-800 text-sm">#{issue._id.slice(-6)}</p>
+        <p className="font-semibold text-slate-800 text-sm">
+          #{issue._id.slice(-6)}
+        </p>
 
         <span
           className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -25,9 +27,7 @@ export default function IssueCard({ issue }) {
       </div>
 
       {/* Title */}
-      <p className="text-sm font-medium text-slate-700">
-        {isChange ? "Pool / Worker Change" : "Repair Request"}
-      </p>
+      <p className="text-sm font-medium text-slate-700">{issue.miner.model}</p>
 
       {/* Description */}
       <p className="text-xs text-slate-500 mt-1">
@@ -39,7 +39,8 @@ export default function IssueCard({ issue }) {
       {/* Dates */}
       <div className="mt-3 flex justify-between text-xs text-slate-400">
         <p className="flex items-center gap-1">
-          <CiCalendar /> Reported: {new Date(issue.createdAt).toLocaleDateString()}
+          <CiCalendar /> Reported:{" "}
+          {new Date(issue.createdAt).toLocaleDateString()}
         </p>
 
         <p className="flex items-center gap-1">
