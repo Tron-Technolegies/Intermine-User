@@ -163,82 +163,99 @@ export default function AgreementModal({ agreement, onClose }) {
             </div>
 
             {/* Signature Section */}
-            <div className="border-2 border-dashed border-[#2B91E1] bg-[#ECF8FF] rounded-2xl p-6 mt-6">
-              <h3 className="text-center text-[#2B91E1] font-semibold text-lg mb-6">
-                Digital Signatures
-              </h3>
+            {!agreement.signed ? (
+              <>
+                <div className="border-2 border-dashed border-[#2B91E1] bg-[#ECF8FF] rounded-2xl p-6 mt-6">
+                  <h3 className="text-center text-[#2B91E1] font-semibold text-lg mb-6">
+                    Digital Signatures
+                  </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* User Signature */}
-                <div className="flex flex-col gap-2">
-                  <p className="font-medium text-gray-800 mb-2">User (Miner)</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* User Signature */}
+                    <div className="flex flex-col gap-2">
+                      <p className="font-medium text-gray-800 mb-2">User (Miner)</p>
 
-                  <SignatureCanvas
-                    ref={sigRef}
-                    penColor="black"
-                    canvasProps={{
-                      className: "border border-[#2B91E1] w-full h-28 rounded-lg bg-white",
-                    }}
-                  />
+                      <SignatureCanvas
+                        ref={sigRef}
+                        penColor="black"
+                        canvasProps={{
+                          className: "border border-[#2B91E1] w-full h-28 rounded-lg bg-white",
+                        }}
+                      />
 
+                      <button
+                        onClick={handleClear}
+                        className="text-xs text-white bg-red-500 hover:bg-red-600 rounded-full px-4 py-1 w-fit self-center"
+                      >
+                        Clear
+                      </button>
+
+                      <div className="mt-2 text-sm text-gray-700 space-y-1">
+                        <p>Name: -</p>
+                        <p>Date: {new Date().toLocaleDateString()}</p>
+                      </div>
+                    </div>
+
+                    {/* Company Signature */}
+                    <div className="flex flex-col gap-2">
+                      <p className="font-medium text-gray-800 mb-2">Company Representative</p>
+
+                      <img
+                        src="/signature-placeholder.png"
+                        className="border border-[#2B91E1] w-full h-28 rounded-lg bg-white object-contain p-2"
+                        alt="Company Signature"
+                      />
+
+                      <div className="mt-2 text-sm text-gray-700 space-y-1">
+                        <p>Name: CEO</p>
+                        <p>Date: {new Date().toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Checkbox */}
+                  <label className="flex items-center gap-2 mt-6 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(e) => setIsChecked(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-400"
+                    />
+                    I confirm that I have read, understood, and agree to all terms and conditions.
+                  </label>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="flex justify-end gap-4 mt-6 pt-4 border-t">
                   <button
-                    onClick={handleClear}
-                    className="text-xs text-white bg-red-500 hover:bg-red-600 rounded-full px-4 py-1 w-fit self-center"
+                    onClick={onClose}
+                    className="px-6 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
                   >
-                    Clear
+                    Cancel
                   </button>
 
-                  <div className="mt-2 text-sm text-gray-700 space-y-1">
-                    <p>Name: -</p>
-                    <p>Date: {new Date().toLocaleDateString()}</p>
-                  </div>
+                  <button
+                    onClick={handleSubmitSignature}
+                    className="px-6 py-2 rounded-xl bg-[#2B91E1] text-white font-medium hover:bg-[#1f78c0] transition"
+                  >
+                    Sign & Submit Agreement
+                  </button>
                 </div>
-
-                {/* Company Signature */}
-                <div className="flex flex-col gap-2">
-                  <p className="font-medium text-gray-800 mb-2">Company Representative</p>
-
-                  <img
-                    src="/signature-placeholder.png"
-                    className="border border-[#2B91E1] w-full h-28 rounded-lg bg-white object-contain p-2"
-                    alt="Company Signature"
-                  />
-
-                  <div className="mt-2 text-sm text-gray-700 space-y-1">
-                    <p>Name: CEO</p>
-                    <p>Date: {new Date().toLocaleDateString()}</p>
-                  </div>
-                </div>
+              </>
+            ) : (
+              /* Already Signed Section */
+              <div className="text-center py-10">
+                <p className="text-green-600 font-semibold text-lg">
+                  This agreement is already signed.
+                </p>
+                <button
+                  onClick={onClose}
+                  className="mt-4 px-6 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 transition"
+                >
+                  Close
+                </button>
               </div>
-
-              {/* Checkbox */}
-              <label className="flex items-center gap-2 mt-6 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={(e) => setIsChecked(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-400"
-                />
-                I confirm that I have read, understood, and agree to all terms and conditions.
-              </label>
-            </div>
-
-            {/* Footer Buttons */}
-            <div className="flex justify-end gap-4 mt-6 pt-4 border-t">
-              <button
-                onClick={onClose}
-                className="px-6 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={handleSubmitSignature}
-                className="px-6 py-2 rounded-xl bg-[#2B91E1] text-white font-medium hover:bg-[#1f78c0] transition"
-              >
-                Sign & Submit Agreement
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>

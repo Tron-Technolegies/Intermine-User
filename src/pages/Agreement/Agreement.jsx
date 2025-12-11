@@ -3,6 +3,7 @@ import api from "../../api/api";
 import AgreementCard from "../../components/agreement/AgreementCard";
 import AgreementModal from "../../components/agreement/AgreementModal";
 import { toast } from "react-toastify";
+import Loading from "../../components/Loading";
 
 export default function AgreementPage() {
   const [agreements, setAgreements] = useState([]);
@@ -31,7 +32,7 @@ export default function AgreementPage() {
       <h1 className="text-xl font-semibold">Your Agreements</h1>
 
       {loading ? (
-        <p>Loading agreements...</p>
+        <Loading />
       ) : agreements.length === 0 ? (
         <p>No agreements found.</p>
       ) : (

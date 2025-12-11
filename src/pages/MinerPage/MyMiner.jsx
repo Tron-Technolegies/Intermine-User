@@ -1,11 +1,12 @@
 import React from "react";
 import MinerCard from "../../components/myminers/MinerCard";
 import useClientMiners from "../../hooks/useClientMiners";
+import Loading from "../../components/Loading";
 
 export default function MyMiners() {
   const { data: miners = [], isLoading, isError } = useClientMiners();
 
-  if (isLoading) return <p className="p-5">Loading miners...</p>;
+  if (isLoading) return <Loading />;
   if (isError) return <p className="p-5 text-red-500">No miners Found</p>;
   return (
     <section className="p-4 sm:p-6 min-h-screen bg-white rounded-lg">

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import useUserStats from "../../hooks/useUserStats";
 import useClientMiners from "../../hooks/useClientMiners";
 import useUserIssues from "../../hooks/issues/useUserIssues";
+import Loading from "../../components/Loading";
 
 export default function Dashboard() {
   const { data: statsData, isLoading: statsLoading } = useUserStats();
@@ -16,7 +17,7 @@ export default function Dashboard() {
   const issues = data?.issues || [];
 
   if (statsLoading || minersLoading || issuesLoading) {
-    return <p className="p-5">Loading dashboard...</p>;
+    return <Loading />;
   }
 
   const stats = [

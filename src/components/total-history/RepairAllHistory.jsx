@@ -5,6 +5,7 @@ import { LuMessagesSquare } from "react-icons/lu";
 import useUserIssues from "../../hooks/issues/useUserIssues";
 import IssueMessagesModal from "./IssueMessagesModal";
 import { MdOutlineChat } from "react-icons/md";
+import Loading from "../Loading";
 
 export default function RepairAllHistory() {
   const [filter, setFilter] = useState("ALL");
@@ -13,15 +14,13 @@ export default function RepairAllHistory() {
   const { data, isLoading } = useUserIssues(filter);
   const issues = data?.issues || [];
 
-  if (isLoading) return <p className="text-gray-500 text-sm">Loading...</p>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-3 mb-5">
-        <h2 className="font-semibold text-lg sm:text-xl text-gray-800">
-          Repair History
-        </h2>
+        <h2 className="font-semibold text-lg sm:text-xl text-gray-800">Repair History</h2>
 
         {/* Filter buttons */}
         <div className="flex items-center gap-1 sm:gap-2 bg-[#F5F6F7] p-1 rounded-lg overflow-x-auto scrollbar-hide">
@@ -30,9 +29,7 @@ export default function RepairAllHistory() {
               key={item}
               onClick={() => setFilter(item)}
               className={`px-3 sm:px-4 py-1 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap transition ${
-                filter === item
-                  ? "bg-white shadow-sm text-black"
-                  : "text-gray-500 hover:text-black"
+                filter === item ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"
               }`}
             >
               {item}
@@ -53,9 +50,7 @@ export default function RepairAllHistory() {
               <div className="flex items-center gap-2">
                 <BsCheckCircle
                   className={`text-lg ${
-                    item.status.toLowerCase() === "resolved"
-                      ? "text-green-500"
-                      : "text-yellow-500"
+                    item.status.toLowerCase() === "resolved" ? "text-green-500" : "text-yellow-500"
                   }`}
                 />
                 <p className="font-semibold text-gray-800 text-sm sm:text-base">
@@ -88,9 +83,7 @@ export default function RepairAllHistory() {
                   : item.issue?.issueType || "No description"}
               </p>
               {item.type !== "change" && item.description && (
-                <p className="text-xs sm:text-sm text-gray-600">
-                  {item.description}
-                </p>
+                <p className="text-xs sm:text-sm text-gray-600">{item.description}</p>
               )}
             </div>
 
@@ -116,17 +109,12 @@ export default function RepairAllHistory() {
 
       {/* Empty State */}
       {!isLoading && issues.length === 0 && (
-        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">
-          No history found.
-        </p>
+        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">No history found.</p>
       )}
 
       {/* Messages Modal */}
       {selectedIssue && (
-        <IssueMessagesModal
-          issueId={selectedIssue}
-          onClose={() => setSelectedIssue(null)}
-        />
+        <IssueMessagesModal issueId={selectedIssue} onClose={() => setSelectedIssue(null)} />
       )}
     </div>
   );

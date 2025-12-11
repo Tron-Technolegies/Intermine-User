@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 import { UserContext } from "../../UserContext";
+import Loading from "../Loading";
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -14,7 +15,6 @@ export default function HomeLayout() {
 
   const { isLoading, data, error, isSuccess } = useGetUserInfo();
 
-  // Redirect when API returns error
   useEffect(() => {
     if (error) {
       navigate("/login");
@@ -27,12 +27,10 @@ export default function HomeLayout() {
     }
   }, [error, navigate, location.pathname]);
 
-  // Store user + validate role
   useEffect(() => {
     if (isSuccess && data) {
       setUser(data);
 
-      // If user is NOT "Client", redirect to login
       if (data.role !== "Client") {
         navigate("/login");
       }
@@ -40,15 +38,13 @@ export default function HomeLayout() {
   }, [isSuccess, data, navigate, setUser]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
     <div className="flex h-screen relative overflow-hidden">
-      {/* Sidebar (visible always on large screens, toggle below 1024px) */}
       <Sidebar isOpen={sidebarOpen} />
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col transition-all duration-300">
         <Header onMenuToggle={toggleSidebar} />
 
@@ -57,7 +53,6 @@ export default function HomeLayout() {
         </main>
       </div>
 
-      {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm lg:hidden z-40 transition-all duration-500"
