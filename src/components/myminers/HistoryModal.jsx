@@ -1,7 +1,10 @@
 import React from "react";
 
 export default function HistoryModal({ onClose, miner }) {
-  const history = [...(miner?.issueHistory || []), ...(miner?.changeHistory || [])];
+  const history = [
+    ...(miner?.issueHistory || []),
+    ...(miner?.changeHistory || []),
+  ];
 
   return (
     <div className="bg-white rounded-xl w-96 max-h-[400px] overflow-y-auto p-5">
@@ -17,8 +20,22 @@ export default function HistoryModal({ onClose, miner }) {
       ) : (
         history.map((item, i) => (
           <div key={i} className="border p-3 rounded-lg mb-3">
-            <h3 className="font-medium">{item.type || "Event"}</h3>
-            <p className="text-sm text-gray-600">{item.description || "—"}</p>
+            <div className="flex justify-between">
+              <h3 className="font-medium capitalize">{item.type || "Event"}</h3>
+              <p className={`text-xs`}>{item.status}</p>
+            </div>
+            {item.type === "repair" && (
+              <p className="text-sm text-gray-600">
+                {item.issue.issueType || ""}
+              </p>
+            )}
+            {item.type === "change" && (
+              <p className="text-sm text-gray-600 flex flex-col gap-1">
+                <span>Req-Pool : {item.changeRequest.pool}</span>
+                <span>Req-Worker : {item.changeRequest.worker}</span>
+              </p>
+            )}
+            <p className="text-sm text-gray-600">{item.description || ""}</p>
             <p className="text-xs text-gray-400 mt-1">
               {item.createdAt ? new Date(item.createdAt).toLocaleString() : "—"}
             </p>

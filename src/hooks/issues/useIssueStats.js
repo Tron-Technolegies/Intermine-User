@@ -7,15 +7,7 @@ export default function useIssueStats() {
     queryFn: async () => {
       const res = await api.get("/issue/stats", { withCredentials: true });
 
-      const b = res.data;
-
-      return {
-        totalrepair: b.allIssues,
-        completed: b.resolved,
-        inprogress: b.pending,
-        warranty: b.warranty,
-        repair: b.repair,
-      };
+      return res.data;
     },
     staleTime: 1000 * 60,
   });
