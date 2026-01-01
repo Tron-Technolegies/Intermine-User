@@ -11,13 +11,18 @@ export default function ProfileForm() {
   const queryClient = useQueryClient();
 
   const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
-  const joinedDate = user?.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US") : "N/A";
+  const joinedDate = user?.createdAt
+    ? new Date(user.createdAt).toLocaleDateString("en-US")
+    : "N/A";
   const minersCount = user?.owned?.length || 0;
 
   const getInitials = () => {
     if (!user?.firstName) return "U";
     if (!user?.lastName) return user.firstName.charAt(0).toUpperCase();
-    return user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase();
+    return (
+      user.firstName.charAt(0).toUpperCase() +
+      user.lastName.charAt(0).toUpperCase()
+    );
   };
 
   const inputClass =
@@ -89,10 +94,12 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="space-y-6 pb-24 sm:pb-12 relative">
+    <div className="flex flex-col gap-5 relative">
       {/* Title */}
       <div>
-        <h3 className="text-xl font-semibold text-gray-900">Profile Settings</h3>
+        <h3 className="text-xl font-semibold text-gray-900">
+          Profile Settings
+        </h3>
         <p className="text-sm text-gray-500">
           Manage your account information and notification preferences
         </p>
@@ -102,7 +109,11 @@ export default function ProfileForm() {
       <div className="border border-gray-300 rounded-xl bg-white p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6">
         <div className="flex items-center gap-4 flex-1">
           {user?.image ? (
-            <img src={user.image} className="w-14 h-14 rounded-full object-cover" alt="user" />
+            <img
+              src={user.image}
+              className="w-14 h-14 rounded-full object-cover"
+              alt="user"
+            />
           ) : (
             <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
               {getInitials()}
@@ -110,7 +121,9 @@ export default function ProfileForm() {
           )}
 
           <div>
-            <p className="font-semibold text-gray-800 text-sm sm:text-base">{fullName}</p>
+            <p className="font-semibold text-gray-800 text-sm sm:text-base">
+              {fullName}
+            </p>
             <p className="text-xs sm:text-sm text-gray-500">{user?.email}</p>
 
             <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
@@ -128,8 +141,10 @@ export default function ProfileForm() {
       {/* FORM FIELDS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Personal Info */}
-        <div className="border border-gray-300 rounded-xl bg-white p-5 sm:p-6 space-y-4">
-          <p className="text-sm font-semibold text-gray-800 mb-2">Personal Information</p>
+        <div className="border border-gray-300 rounded-xl bg-white p-5 sm:p-6 ">
+          <p className="text-sm font-semibold text-gray-800 mb-2">
+            Personal Information
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
@@ -170,8 +185,10 @@ export default function ProfileForm() {
         </div>
 
         {/* Address Info */}
-        <div className="border border-gray-300 rounded-xl bg-white p-5 sm:p-6 space-y-4">
-          <p className="text-sm font-semibold text-gray-800 mb-2">Address Information</p>
+        <div className="border border-gray-300 rounded-xl bg-white p-5 sm:p-6 ">
+          <p className="text-sm font-semibold text-gray-800 mb-2">
+            Address Information
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
@@ -218,7 +235,7 @@ export default function ProfileForm() {
       </div>
 
       {/* Save Button */}
-      <div className="fixed bottom-0 left-0 w-full px-6 py-4 flex justify-end sm:static sm:mt-6 z-40">
+      <div className="w-full flex justify-end sm:static">
         <button
           type="button"
           className="w-full sm:w-auto bg-[#2B347A] text-white px-6 py-2 rounded-lg shadow-md hover:bg-[#232b67]"
