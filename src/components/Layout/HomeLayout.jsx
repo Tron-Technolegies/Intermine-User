@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
@@ -12,30 +12,21 @@ export default function HomeLayout() {
 
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const user = useLoaderData();
 
   const { isLoading, data, error, isSuccess } = useGetUserInfo();
 
   useEffect(() => {
-    if (error) {
-      navigate("/login");
+    if (user) {
+      setUser(user);
     }
-  }, [error, navigate]);
+  }, [user]);
 
   useEffect(() => {
-    if (error && location.pathname !== "/login") {
-      navigate("/login");
-    }
-  }, [error, navigate, location.pathname]);
-
-  useEffect(() => {
-    if (isSuccess && data) {
+    if (data) {
       setUser(data);
-
-      if (data.role !== "Client") {
-        navigate("/login");
-      }
     }
-  }, [isSuccess, data, navigate, setUser]);
+  }, [data]);
 
   if (isLoading) {
     return <Loading />;

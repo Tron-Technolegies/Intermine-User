@@ -16,6 +16,7 @@ import VerifyOtpPage from "./pages/auth/VerifyOtpPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 import { ToastContainer } from "react-toastify";
+import { adminLoader } from "./loader/adminLoader";
 
 const router = createBrowserRouter([
   // PUBLIC ROUTES
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
+    loader: adminLoader,
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
