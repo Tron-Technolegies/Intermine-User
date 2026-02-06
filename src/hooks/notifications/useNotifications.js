@@ -21,7 +21,7 @@ export default function useNotifications() {
       return await api.patch(
         `/notification/user/${id}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
     },
     onSuccess: () => {
@@ -35,7 +35,7 @@ export default function useNotifications() {
       return await api.patch(
         "/notification/user/all",
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
     },
     onSuccess: () => {
@@ -44,7 +44,7 @@ export default function useNotifications() {
   });
 
   return {
-    ...notificationsQuery,
+    notificationsQuery,
     clearOne,
     clearAll,
   };

@@ -6,16 +6,10 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { UserContext } from "../../UserContext";
 import api from "../../api/api";
 import { useNotificationContext } from "../../NotificationContext";
+import useNotifications from "../../hooks/notifications/useNotifications";
 
 export default function Header({ onMenuToggle }) {
-  const {
-    data: notifications = [],
-    isLoading,
-    clearOne,
-    clearAll,
-  } = useNotificationContext();
-
-  const unreadCount = notifications.length;
+  const { notificationsQuery, clearAll, clearOne } = useNotifications();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -81,78 +75,83 @@ export default function Header({ onMenuToggle }) {
       <div className="flex items-center gap-6">
         {/* Notifications */}
         {/* Notification */}
-        <div className="relative" ref={notificationRef}>
-          {unreadCount > 0 && (
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-          )}
+        {notificationsQuery.isLoading ? (
+          <p>....</p>
+        ) : (
+          <div className="relative" ref={notificationRef}>
+            {notificationsQuery.data.length > 0 && (
+              <span className="absolute -top-3 -right-3 w-7 h-7 flex justify-center items-center text-xs text-white bg-red-500 rounded-full">
+                {notificationsQuery.data.length}
+              </span>
+            )}
 
-          <LuMail
-            className="w-7 h-7 cursor-pointer text-slate-700"
-            onClick={() => setShowNotification(!showNotification)}
-          />
+            <LuMail
+              className="w-7 h-7 cursor-pointer text-slate-700"
+              onClick={() => setShowNotification(!showNotification)}
+            />
 
-          {showNotification && (
-            <div className="absolute right-0 mt-3 w-96 bg-white shadow-xl rounded-xl border border-slate-200 z-50">
-              {/* HEADER */}
-              <div className="flex justify-between items-center px-4 py-3 border-b bg-slate-50 rounded-t-xl">
-                <p className="text-sm font-semibold text-slate-800">
-                  Notifications
-                </p>
-
-                {unreadCount > 0 && (
-                  <button
-                    onClick={() => clearAll.mutate()}
-                    className="text-xs text-red-600 hover:underline"
-                  >
-                    Clear All
-                  </button>
-                )}
-              </div>
-
-              {/* LIST */}
-              <ul className="max-h-72 overflow-y-auto px-4 py-3 space-y-3 custom-scroll">
-                {isLoading ? (
-                  <p className="text-center text-sm text-slate-500 py-3">
-                    Loading notifications...
+            {showNotification && (
+              <div className="absolute right-0 mt-3 w-96 bg-white shadow-xl rounded-xl border border-slate-200 z-50">
+                {/* HEADER */}
+                <div className="flex justify-between items-center px-4 py-3 border-b bg-slate-50 rounded-t-xl">
+                  <p className="text-sm font-semibold text-slate-800">
+                    Notifications
                   </p>
-                ) : notifications.length === 0 ? (
-                  <p className="text-center text-sm text-slate-500 py-3">
-                    No new notifications
-                  </p>
-                ) : (
-                  notifications.map((item) => (
-                    <li
-                      key={item?._id}
-                      className="p-3 bg-slate-50 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-100 transition"
+
+                  {notificationsQuery.data.length > 0 && (
+                    <button
+                      onClick={() => clearAll.mutate()}
+                      className="text-xs text-red-600 hover:underline"
                     >
-                      {/* TITLE + CLEAR ONE */}
-                      <div className="flex justify-between items-start">
-                        <p className="text-sm font-medium text-slate-800">
-                          {item?.problem || "Notification"}
+                      Clear All
+                    </button>
+                  )}
+                </div>
+
+                {/* LIST */}
+                <ul className="max-h-72 overflow-y-auto px-4 py-3 space-y-3 custom-scroll">
+                  {notificationsQuery.isLoading ? (
+                    <p className="text-center text-sm text-slate-500 py-3">
+                      Loading notifications...
+                    </p>
+                  ) : notificationsQuery.data.length === 0 ? (
+                    <p className="text-center text-sm text-slate-500 py-3">
+                      No new notifications
+                    </p>
+                  ) : (
+                    notificationsQuery.data.map((item) => (
+                      <li
+                        key={item?._id}
+                        className="p-3 bg-slate-50 rounded-lg border border-slate-200 shadow-sm hover:bg-slate-100 transition"
+                      >
+                        {/* TITLE + CLEAR ONE */}
+                        <div className="flex justify-between items-start">
+                          <p className="text-sm font-medium text-slate-800">
+                            {item?.problem || "Notification"}
+                          </p>
+
+                          <button
+                            onClick={() => clearOne.mutate(item._id)}
+                            className="text-[11px] text-red-500 hover:text-red-700"
+                          >
+                            Clear
+                          </button>
+                        </div>
+
+                        {/* MESSAGE CONTENT */}
+
+                        {/* DATE */}
+                        <p className="text-[10px] text-slate-400 mt-2">
+                          {new Date(item.createdAt).toLocaleString()}
                         </p>
-
-                        <button
-                          onClick={() => clearOne.mutate(item._id)}
-                          className="text-[11px] text-red-500 hover:text-red-700"
-                        >
-                          Clear
-                        </button>
-                      </div>
-
-                      {/* MESSAGE CONTENT */}
-
-                      {/* DATE */}
-                      <p className="text-[10px] text-slate-400 mt-2">
-                        {new Date(item.createdAt).toLocaleString()}
-                      </p>
-                    </li>
-                  ))
-                )}
-              </ul>
-            </div>
-          )}
-        </div>
-
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
         {/* Profile Menu */}
         <div
           className="relative flex items-center gap-3 cursor-pointer"
