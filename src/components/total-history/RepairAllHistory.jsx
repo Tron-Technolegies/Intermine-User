@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CiCalendar } from "react-icons/ci";
 import { BsCheckCircle } from "react-icons/bs";
-import { LuMessagesSquare } from "react-icons/lu";
+import { LuCpu, LuMessagesSquare } from "react-icons/lu";
 import useUserIssues from "../../hooks/issues/useUserIssues";
 import IssueMessagesModal from "./IssueMessagesModal";
 import { MdOutlineChat } from "react-icons/md";
@@ -20,7 +20,9 @@ export default function RepairAllHistory() {
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center gap-3 mb-5">
-        <h2 className="font-semibold text-lg sm:text-xl text-gray-800">Repair History</h2>
+        <h2 className="font-semibold text-lg sm:text-xl text-gray-800">
+          Repair History
+        </h2>
 
         {/* Filter buttons */}
         <div className="flex items-center gap-1 sm:gap-2 bg-[#F5F6F7] p-1 rounded-lg overflow-x-auto scrollbar-hide">
@@ -29,7 +31,9 @@ export default function RepairAllHistory() {
               key={item}
               onClick={() => setFilter(item)}
               className={`px-3 sm:px-4 py-1 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap transition ${
-                filter === item ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"
+                filter === item
+                  ? "bg-white shadow-sm text-black"
+                  : "text-gray-500 hover:text-black"
               }`}
             >
               {item}
@@ -40,17 +44,20 @@ export default function RepairAllHistory() {
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+        {issues.length < 1 && <p>Hey You have no issues at the moment</p>}
         {issues.map((item, i) => (
           <div
             key={i}
-            className="border border-gray-200 rounded-lg p-4 bg-[#F9F9FA] hover:shadow-md transition"
+            className="border border-gray-200 flex flex-col justify-between rounded-lg p-4 bg-[#F9F9FA] hover:shadow-md transition"
           >
             {/* Header row */}
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2">
                 <BsCheckCircle
                   className={`text-lg ${
-                    item.status.toLowerCase() === "resolved" ? "text-green-500" : "text-yellow-500"
+                    item.status.toLowerCase() === "resolved"
+                      ? "text-green-500"
+                      : "text-yellow-500"
                   }`}
                 />
                 <p className="font-semibold text-gray-800 text-sm sm:text-base">
@@ -72,18 +79,26 @@ export default function RepairAllHistory() {
             <div className="pt-2 border-t border-[#DADEE6]" />
 
             {/* Miner Info */}
-            <div className="mt-2">
-              <p className="font-semibold text-gray-800 text-sm sm:text-base">
+            <div className="mt-2 flex flex-col gap-2">
+              <p className="font-semibold text-blue-700 text-sm sm:text-base">
                 {item.type === "change" ? "Pool/Worker Change" : "Repair Issue"}
               </p>
-              <p>{item?.miner?.model}</p>
+              <div className="flex gap-2 items-center">
+                <LuCpu />
+                <p>
+                  {item?.miner?.model} ({item?.workerAddress})
+                </p>
+              </div>
+
               <p className="text-xs sm:text-sm text-gray-600">
                 {item.type === "change"
                   ? `Worker: ${item.changeRequest?.worker}, Pool: ${item.changeRequest?.pool}`
                   : item.issue?.issueType || "No description"}
               </p>
               {item.type !== "change" && item.description && (
-                <p className="text-xs sm:text-sm text-gray-600">{item.description}</p>
+                <p className="text-xs sm:text-sm text-gray-600 italic">
+                  "{item.description}"
+                </p>
               )}
             </div>
 
@@ -91,7 +106,7 @@ export default function RepairAllHistory() {
             <div className="flex justify-between items-center text-[11px] sm:text-xs text-gray-500 mt-3 border-t border-gray-200 pt-2">
               <div className="flex items-center gap-1">
                 <CiCalendar className="text-gray-400" />{" "}
-                {new Date(item.createdAt).toLocaleDateString()}
+                {new Date(item.createdAt).toLocaleString()}
               </div>
 
               {item.messages?.length > 0 && (
@@ -109,12 +124,17 @@ export default function RepairAllHistory() {
 
       {/* Empty State */}
       {!isLoading && issues.length === 0 && (
-        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">No history found.</p>
+        <p className="text-center text-gray-500 mt-10 text-sm sm:text-base">
+          No history found.
+        </p>
       )}
 
       {/* Messages Modal */}
       {selectedIssue && (
-        <IssueMessagesModal issueId={selectedIssue} onClose={() => setSelectedIssue(null)} />
+        <IssueMessagesModal
+          issueId={selectedIssue}
+          onClose={() => setSelectedIssue(null)}
+        />
       )}
     </div>
   );

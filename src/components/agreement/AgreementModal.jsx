@@ -1,11 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import SignatureCanvas from "react-signature-canvas";
 import api from "../../api/api";
 import { toast } from "react-toastify";
+import { useLoaderData } from "react-router-dom";
+import { UserContext } from "../../UserContext";
 
 export default function AgreementModal({ agreement, onClose }) {
   const sigRef = useRef();
+  const { user } = useContext(UserContext);
+
   const [signed, setSigned] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -46,7 +50,7 @@ export default function AgreementModal({ agreement, onClose }) {
           agreementId: agreement._id,
           signature,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       toast.success("Agreement signed successfully!");
@@ -69,7 +73,10 @@ export default function AgreementModal({ agreement, onClose }) {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
       <div className="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative">
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-black">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-600 hover:text-black"
+        >
           <IoClose size={24} />
         </button>
 
@@ -77,7 +84,9 @@ export default function AgreementModal({ agreement, onClose }) {
         <div className="px-6 py-6 space-y-8 flex-1 overflow-y-auto">
           {/* Header */}
           <div className="bg-[#2B347A] space-y-3 p-6 text-center rounded-lg w-full">
-            <p className="text-white font-semibold text-lg">{agreement.title}</p>
+            <p className="text-white font-semibold text-lg">
+              {agreement.title}
+            </p>
             <p className="text-white text-sm">Agreement No: MA-2024-001847</p>
           </div>
 
@@ -85,10 +94,13 @@ export default function AgreementModal({ agreement, onClose }) {
           <div className="bg-[#F9F9FA] border border-[#D2D2D2] rounded p-6">
             <div className="space-y-4 py-4">
               <div>
-                <p className="font-semibold text-black mb-1">Client / Company Name:</p>
+                <p className="font-semibold text-black mb-1">
+                  Client / Company Name:
+                </p>
                 <input
                   type="text"
-                  defaultValue="Intermine"
+                  disabled
+                  value={user?.companyName}
                   className="border border-[#C2C8CF] w-full md:w-[50%] px-4 rounded-lg py-2 bg-white text-black focus:outline-[#2B91E1]"
                 />
               </div>
@@ -122,7 +134,9 @@ export default function AgreementModal({ agreement, onClose }) {
               </div>
 
               <div>
-                <p className="font-bold text-black">3. Company Responsibilities</p>
+                <p className="font-bold text-black">
+                  3. Company Responsibilities
+                </p>
                 <ul className="list-disc ml-6 text-gray-700">
                   <li>Provide stable mining operations</li>
                   <li>Fair reward distribution</li>
@@ -173,13 +187,16 @@ export default function AgreementModal({ agreement, onClose }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* User Signature */}
                     <div className="flex flex-col gap-2">
-                      <p className="font-medium text-gray-800 mb-2">User (Miner)</p>
+                      <p className="font-medium text-gray-800 mb-2">
+                        User (Miner)
+                      </p>
 
                       <SignatureCanvas
                         ref={sigRef}
                         penColor="black"
                         canvasProps={{
-                          className: "border border-[#2B91E1] w-full h-28 rounded-lg bg-white",
+                          className:
+                            "border border-[#2B91E1] w-full h-28 rounded-lg bg-white",
                         }}
                       />
 
@@ -198,7 +215,9 @@ export default function AgreementModal({ agreement, onClose }) {
 
                     {/* Company Signature */}
                     <div className="flex flex-col gap-2">
-                      <p className="font-medium text-gray-800 mb-2">Company Representative</p>
+                      <p className="font-medium text-gray-800 mb-2">
+                        Company Representative
+                      </p>
 
                       <img
                         src="/signature-placeholder.png"
@@ -221,7 +240,8 @@ export default function AgreementModal({ agreement, onClose }) {
                       onChange={(e) => setIsChecked(e.target.checked)}
                       className="w-4 h-4 rounded border-gray-400"
                     />
-                    I confirm that I have read, understood, and agree to all terms and conditions.
+                    I confirm that I have read, understood, and agree to all
+                    terms and conditions.
                   </label>
                 </div>
 
