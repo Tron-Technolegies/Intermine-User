@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AgreementCard from "../../components/agreement/AgreementCard";
-import AgreementModal from "../../components/agreement/AgreementModal";
 import Loading from "../../components/Loading";
 import { useGetAgreements } from "../../hooks/agreements/useGetAgreements";
 
@@ -19,25 +18,8 @@ export default function AgreementPage() {
       ) : agreements.length === 0 ? (
         <p>No agreements found.</p>
       ) : (
-        agreements.map((ag) => (
-          <AgreementCard
-            key={ag._id}
-            agreement={ag}
-            // onOpen={() => setSelectedAgreement(ag)}
-          />
-        ))
+        agreements.map((ag) => <AgreementCard key={ag._id} agreement={ag} />)
       )}
-
-      {/* Modal */}
-      {/* {selectedAgreement && (
-        <AgreementModal
-          agreement={selectedAgreement}
-          onClose={() => {
-            setSelectedAgreement(null);
-            getUserAgreements(); // refresh list after signing
-          }}
-        />
-      )} */}
     </div>
   );
 }
