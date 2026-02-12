@@ -5,10 +5,14 @@ import Header from "./Header";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 import { UserContext } from "../../UserContext";
 import Loading from "../Loading";
+import FirstPopup from "./FirstPopup";
+import FirstAgreementPopup from "./FirstAgreementPopup";
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const [openWelcome, setOpenWelcome] = useState(false);
+  const [openAgree, setOpenAgree] = useState(false);
 
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
@@ -25,6 +29,15 @@ export default function HomeLayout() {
   useEffect(() => {
     if (data) {
       setUser(data);
+      if (!data.allTermsAccepted) {
+        setOpenWelcome(true);
+      }
+      if (
+        (data.miningAgreement || data.purchaseAgreement) &&
+        !data.isAgreementSigned
+      ) {
+        setOpenAgree(true);
+      }
     }
   }, [data]);
 
@@ -40,6 +53,14 @@ export default function HomeLayout() {
         <Header onMenuToggle={toggleSidebar} />
 
         <main className="flex-1 bg-slate-50 overflow-y-auto p-6">
+          <FirstAgreementPopup
+            open={openAgree}
+            handleClose={() => setOpenAgree(false)}
+          />
+          <FirstPopup
+            open={openWelcome}
+            handleClose={() => setOpenWelcome(false)}
+          />
           <Outlet />
         </main>
       </div>
