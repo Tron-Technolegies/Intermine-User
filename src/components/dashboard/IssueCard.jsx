@@ -18,8 +18,8 @@ export default function IssueCard({ issue }) {
             issue.status.toLowerCase() === "resolved"
               ? "bg-green-100 text-green-700"
               : issue.status.toLowerCase() === "pending"
-              ? "bg-yellow-100 text-yellow-700"
-              : "bg-red-100 text-red-700"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-red-100 text-red-700"
           }`}
         >
           {issue.status}
@@ -41,10 +41,6 @@ export default function IssueCard({ issue }) {
         <p className="flex items-center gap-1">
           <CiCalendar /> Reported:{" "}
           {new Date(issue.createdAt).toLocaleDateString()}
-        </p>
-
-        <p className="flex items-center gap-1">
-          <IoIosCheckmarkCircleOutline /> Resolved:
         </p>
       </div>
     </div>

@@ -4,14 +4,15 @@ import { FiEdit2, FiClock } from "react-icons/fi";
 import { CiCalendar } from "react-icons/ci";
 import { FaBolt } from "react-icons/fa6";
 import { PiCpuLight } from "react-icons/pi";
-
 import HistoryModal from "./HistoryModal";
 import ReportIssueModal from "./ReportIssueModal";
 import RequestChangeModal from "./RequestChangeModal";
+import { getRemainingDays } from "../../utils/calculations";
 
 export default function MinerCard({ miner }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setActiveModal(null);
@@ -37,7 +38,9 @@ export default function MinerCard({ miner }) {
               className={`px-2 py-0.5 text-xs rounded-full ${
                 miner.status === "online"
                   ? "bg-green-100 text-green-600"
-                  : "bg-yellow-100 text-yellow-600"
+                  : miner.status === "offline"
+                    ? "bg-red-100 text-red-600"
+                    : "bg-yellow-100 text-yellow-600"
               }`}
             >
               {miner.status}
@@ -63,8 +66,20 @@ export default function MinerCard({ miner }) {
             </div>
           </div>
         </div>
+        {miner.currentIssue && (
+          <div className="my-2 py-2 border-t border-b border-gray-300 text-xs flex justify-between">
+            <p className="text-red-600">Current Issue Ticket</p>
+            <p
+              className={`bg-yellow-200 text-yellow-700 py-1 px-2 rounded-md text-xs`}
+            >
+              {miner.currentIssue?.status}
+            </p>
+          </div>
+        )}
         {miner.trackingLink && (
-          <div className="text-sm">Track - {miner.trackingLink}</div>
+          <div className="text-sm my-2 py-2 border-t border-b border-gray-300">
+            Track - {miner.trackingLink}
+          </div>
         )}
 
         {/* Hashrate + Power */}
@@ -92,13 +107,30 @@ export default function MinerCard({ miner }) {
             <BsShieldCheck className="text-blue-600" />
             <div>
               <p className="font-semibold text-sm text-gray-800">Warranty</p>
-              <p className="text-xs text-gray-500">{miner.warranty} years</p>
+              {miner.warrantyEndDate &&
+                getRemainingDays(miner.warrantyEndDate) > 0 && (
+                  <p className="text-xs text-gray-500">
+                    {getRemainingDays(miner.warrantyEndDate)} days remaining
+                  </p>
+                )}
             </div>
           </div>
 
-          <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full">
-            Active
-          </span>
+          {miner.warrantyEndDate ? (
+            getRemainingDays(miner.warrantyEndDate) > 0 ? (
+              <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full">
+                Active
+              </span>
+            ) : (
+              <span className="text-xs bg-red-600 text-white px-3 py-1 rounded-full">
+                Inactive
+              </span>
+            )
+          ) : (
+            <span className="text-xs bg-red-600 text-white px-3 py-1 rounded-full">
+              Inactive
+            </span>
+          )}
         </div>
 
         {/* Worker & Pool */}
@@ -122,28 +154,32 @@ export default function MinerCard({ miner }) {
 
         {/* Purchased + History */}
         <div className="flex justify-between items-center text-xs text-gray-600 mt-3 p-3 border-t border-[#DADEE6]">
-          <div className="flex items-center gap-1">
-            <CiCalendar />
-            <span>
-              Purchased: {new Date(miner.connectionDate).toLocaleDateString()}
-            </span>
-          </div>
+          {miner.connectionDate && (
+            <div className="flex items-center gap-1">
+              <CiCalendar />
+              <span>
+                Purchased: {new Date(miner.connectionDate).toLocaleDateString()}
+              </span>
+            </div>
+          )}
 
           <button
-            onClick={() => setActiveModal("history")}
+            onClick={() => setOpen(true)}
             className="flex items-center gap-1 text-gray-700 hover:text-blue-600 border px-3 py-1 rounded-lg"
           >
-            <FiClock /> History
+            <FiClock /> Issues
           </button>
         </div>
       </div>
+      <HistoryModal
+        open={open}
+        handleClose={() => setOpen(false)}
+        miner={miner}
+      />
 
       {/* MODALS */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50">
-          {activeModal === "history" && (
-            <HistoryModal onClose={handleClose} miner={miner} />
-          )}
           {activeModal === "report" && (
             <ReportIssueModal onClose={handleClose} miner={miner} />
           )}

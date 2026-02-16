@@ -5,17 +5,19 @@ import App from "./App.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import UserContextProvider from "./UserContext.jsx";
 import { NotificationProvider } from "./NotificationContext.jsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={true} />
       <NotificationProvider>
         <UserContextProvider>
           <App />
         </UserContextProvider>
       </NotificationProvider>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

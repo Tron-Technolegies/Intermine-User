@@ -1,55 +1,24 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api/api";
 import AgreementCard from "../../components/agreement/AgreementCard";
-import AgreementModal from "../../components/agreement/AgreementModal";
-import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
+import { useGetAgreements } from "../../hooks/agreements/useGetAgreements";
 
 export default function AgreementPage() {
-  const [agreements, setAgreements] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedAgreement, setSelectedAgreement] = useState(null);
-
-  // Fetch agreements
-  const getUserAgreements = async () => {
-    try {
-      const res = await api.get("/agreement/user", { withCredentials: true });
-      setAgreements(res.data.agreements || []);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load agreements.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUserAgreements();
-  }, []);
-
-  return (
+  const { isError, isLoading, error, data: agreements } = useGetAgreements();
+  return isLoading ? (
+    <Loading />
+  ) : isError ? (
+    <p>{error.message}</p>
+  ) : (
     <div className="p-6 space-y-4">
       <h1 className="text-xl font-semibold">Your Agreements</h1>
 
-      {loading ? (
+      {isLoading ? (
         <Loading />
       ) : agreements.length === 0 ? (
         <p>No agreements found.</p>
       ) : (
-        agreements.map((ag) => (
-          <AgreementCard key={ag._id} agreement={ag} onOpen={() => setSelectedAgreement(ag)} />
-        ))
-      )}
-
-      {/* Modal */}
-      {selectedAgreement && (
-        <AgreementModal
-          agreement={selectedAgreement}
-          onClose={() => {
-            setSelectedAgreement(null);
-            getUserAgreements(); // refresh list after signing
-          }}
-        />
+        agreements.map((ag) => <AgreementCard key={ag._id} agreement={ag} />)
       )}
     </div>
   );
