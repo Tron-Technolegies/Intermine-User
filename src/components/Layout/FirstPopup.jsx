@@ -113,8 +113,14 @@ export default function FirstPopup({ open, handleClose }) {
                 onChange={(e) => setFirstAgree(e.target.checked)}
               />
               <label htmlFor="first">
-                I accept the General Terms and Conditions (AGB) of Intermine
-                Solutions.
+                I accept the General Terms and Conditions{" "}
+                <a
+                  href="https://shop.intermine-solutions.de/policies/terms-of-service"
+                  target="_blank"
+                >
+                  (AGB)
+                </a>{" "}
+                of Intermine Solutions.
               </label>
             </div>
             <div className={listClass}>
