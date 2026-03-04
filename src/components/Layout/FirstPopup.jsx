@@ -11,6 +11,7 @@ import { FaFileSignature } from "react-icons/fa6";
 import { MdAccountBox } from "react-icons/md";
 import { useAcceptTerms } from "../../hooks/useAcceptTerms";
 import { toast } from "react-toastify";
+import { firstpopupLanguages } from "../../utils/popupLanguageData";
 const style = {
   position: "absolute",
   top: "50%",
@@ -38,6 +39,9 @@ export default function FirstPopup({ open, handleClose }) {
   const [firstAgree, setFirstAgree] = useState(false);
   const [secondAgree, setSecondAgree] = useState(false);
   const [thirdAgree, setThirdAgree] = useState(false);
+  const [lang, setLang] = useState("de");
+
+  const t = firstpopupLanguages[lang];
 
   async function handleContinue() {
     try {
@@ -64,46 +68,44 @@ export default function FirstPopup({ open, handleClose }) {
           component="h2"
           sx={{ fontWeight: 700, fontSize: 24 }}
         >
-          Welcome {user?.clientName}
+          {t.welcome} {user?.clientName}
         </Typography>
-        <div className="flex flex-col gap-3 leading-relaxed max-w-[750px]">
-          <p>Welcome to your personalized Intermine Dashboard.</p>
-          <p>
-            This platform has been designed to give you complete visibility and
-            control over your mining operations.
-          </p>
-          <p>From here, you can:</p>
+        <div className="flex flex-col gap-3 leading-relaxed max-w-[750px] relative">
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            className="absolute -right-36 bg-blue-800 p-2 rounded-md text-xs outline-none"
+          >
+            <option value={"de"}>German</option>
+            <option value={"en"}>English</option>
+          </select>
+          <p>{t.intro1}</p>
+          <p>{t.intro2}</p>
+          <p>{t.fromHere}</p>
           <ul className="ml-5 flex flex-col gap-2">
             <li className={listClass}>
               <GoCpu size={24} />
-              Manage your miners and monitor their current status
+              {t.point1}
             </li>
             <li className={listClass}>
               <TfiAnnouncement size={24} />
-              Track important updates and informations from hosting locations
+              {t.point2}
             </li>
             <li className={listClass}>
               <AiOutlineIssuesClose size={24} />
-              Report issues and follow their progress until resolution
+              {t.point3}
             </li>
             <li className={listClass}>
               <FaFileSignature size={24} />
-              View and sign hosting agreements securely
+              {t.point4}
             </li>
             <li className={listClass}>
               <MdAccountBox size={24} />
-              Access important account-related information anytime
+              {t.point5}
             </li>
           </ul>
-          <p>
-            Your dashboard is built to ensure transparency, efficiency, and a
-            smooth mining experience. If you need assistance at any point, your
-            dedicated Account Manager is always available to support you.
-          </p>
-          <p>
-            We’re excited to have you onboard and look forward to supporting
-            your mining journey with Intermine
-          </p>
+          <p>{t.outro1}</p>
+          <p>{t.outro2}</p>
           <div className="text-xs flex flex-col gap-2">
             <div className={listClass}>
               <input
@@ -113,14 +115,15 @@ export default function FirstPopup({ open, handleClose }) {
                 onChange={(e) => setFirstAgree(e.target.checked)}
               />
               <label htmlFor="first">
-                I accept the General Terms and Conditions{" "}
+                {t.checkPoint1start}{" "}
                 <a
                   href="https://shop.intermine-solutions.de/policies/terms-of-service"
                   target="_blank"
+                  className="text-white font-extrabold underline tracking-wide"
                 >
                   (AGB)
                 </a>{" "}
-                of Intermine Solutions.
+                {t.checkPoint1end}
               </label>
             </div>
             <div className={listClass}>
@@ -131,7 +134,14 @@ export default function FirstPopup({ open, handleClose }) {
                 onChange={(e) => setSecondAgree(e.target.checked)}
               />
               <label htmlFor="second">
-                I accept the Dashboard Usage Agreement.
+                {t.checkPoint2start}{" "}
+                <a
+                  href="/intermine-usage-agreement.pdf"
+                  download={"intermine-usage-agreement.pdf"}
+                  className="text-white font-extrabold underline tracking-wide"
+                >
+                  {t.checkPoint2Link}
+                </a>
               </label>
             </div>
             <div className={listClass}>
@@ -142,9 +152,15 @@ export default function FirstPopup({ open, handleClose }) {
                 onChange={(e) => setThirdAgree(e.target.checked)}
               />
               <label htmlFor="third" className="leading-relaxed">
-                And I confirm that I have read the Privacy Policy. I agree that
-                my data will be processed in accordance with the Privacy Policy
-                for the provision and administration of the dashboard.
+                {t.checkPoint3start}{" "}
+                <a
+                  href="/intermine-privacy-policy.pdf"
+                  download={"intermine-privacy-policy.pdf"}
+                  className="text-white font-extrabold underline tracking-wide"
+                >
+                  {t.checkPoint3Link}
+                </a>
+                . {t.checkPoint3end}
               </label>
             </div>
           </div>
