@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../api/api";
 
-const INACTIVITY_TIME = 1 * 60 * 1000; // 5 minutes
+const INACTIVITY_TIME = 5 * 60 * 1000; // 5 minutes
 
 export default function useAutoLogout() {
   const timer = useRef(null);
