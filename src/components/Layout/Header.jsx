@@ -7,9 +7,11 @@ import { UserContext } from "../../UserContext";
 import api from "../../api/api";
 import { useNotificationContext } from "../../NotificationContext";
 import useNotifications from "../../hooks/notifications/useNotifications";
+import useAutoLogout from "../../hooks/useAutoLogout";
 
 export default function Header({ onMenuToggle }) {
   const { notificationsQuery, clearAll, clearOne } = useNotifications();
+  useAutoLogout();
 
   const location = useLocation();
   const navigate = useNavigate();
