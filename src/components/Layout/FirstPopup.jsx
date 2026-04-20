@@ -14,11 +14,11 @@ import { toast } from "react-toastify";
 import { firstpopupLanguages } from "../../utils/popupLanguageData";
 const style = {
   position: "absolute",
-  top: "5%",
+  top: "50%",
   left: "50%",
-  transform: "translateX(-50%)",
+  transform: "translate(-50%, -50%)",
   width: "90%",
-  maxHeight: "90vh",
+  maxHeight: "85vh",
   overflowY: "auto",
   bgcolor: "background.paper",
   display: "flex",
@@ -62,18 +62,20 @@ export default function FirstPopup({ open, handleClose }) {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <div className="flex flex-col gap-3 leading-relaxed max-w-[750px] relative mt-20">
-          <p className="font-bold text-2xl text-center">
-            {t.welcome} {user?.clientName}
-          </p>
+        <div className="w-full flex justify-end">
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
-            className="absolute -right-36 bg-blue-800 p-2 rounded-md text-xs outline-none"
+            className="bg-blue-800 p-2 rounded-md text-xs outline-none"
           >
             <option value={"de"}>German</option>
             <option value={"en"}>English</option>
           </select>
+        </div>
+        <div className="flex flex-col gap-3 leading-relaxed max-w-[750px] relative mt-2">
+          <p className="font-bold text-2xl text-center">
+            {t.welcome} {user?.clientName}
+          </p>
           <p>{t.intro1}</p>
           <p>{t.intro2}</p>
           <p>{t.fromHere}</p>
