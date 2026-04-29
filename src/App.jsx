@@ -17,6 +17,7 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 import { ToastContainer } from "react-toastify";
 import { adminLoader } from "./loader/adminLoader";
+import ResetPasswordFromLink from "./pages/auth/ResetPasswordFromLink";
 
 const router = createBrowserRouter([
   // PUBLIC ROUTES
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
   { path: "/forgot-password", element: <ForgotPasswordPage /> },
   { path: "/verify-otp", element: <VerifyOtpPage /> },
   { path: "/reset-password", element: <ResetPasswordPage /> },
+  { path: "/reset-password/:token", element: <ResetPasswordFromLink /> },
 
   // PROTECTED LAYOUT ROUTES
   {
