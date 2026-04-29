@@ -57,7 +57,7 @@ export default function HistoryModal({ open, miner, handleClose }) {
                   {item.type === "repair" && (
                     <p className="text-sm text-gray-600">
                       <b>Issue: </b>
-                      {item.issue.issueType || ""}
+                      {item.issue?.issueType || item.description || ""}
                     </p>
                   )}
                   {item.type === "change" && (
