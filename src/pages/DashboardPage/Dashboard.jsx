@@ -29,7 +29,7 @@ export default function Dashboard() {
       textColor: "text-indigo-700",
     },
     {
-      title: "Total Repairs",
+      title: "Total Active Repairs",
       value: statsData?.repairs ?? 0,
       icon: <FiTool size={20} />,
       bgColor: "bg-purple-50",
@@ -75,7 +75,9 @@ export default function Dashboard() {
         {/* Miners Section */}
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 w-full xl:w-2/3">
           <div className="flex justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-800">Your Miners</h2>
+            <h2 className="text-lg font-semibold text-slate-800">
+              Your Miners
+            </h2>
             <Link to="/my-miners" className="text-sm text-indigo-600">
               View all
             </Link>
@@ -89,14 +91,18 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-400 text-sm py-6">No miners available.</p>
+            <p className="text-center text-slate-400 text-sm py-6">
+              No miners available.
+            </p>
           )}
         </div>
 
         {/* Issues Section */}
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 w-full xl:w-1/3">
           <div className="flex justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-800">Issue History</h2>
+            <h2 className="text-lg font-semibold text-slate-800">
+              Issue History
+            </h2>
             <Link to="/total-history" className="text-sm text-indigo-600">
               View all
             </Link>
@@ -110,7 +116,9 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-400 text-sm py-6">No issues to show.</p>
+            <p className="text-center text-slate-400 text-sm py-6">
+              No issues to show.
+            </p>
           )}
         </div>
       </div>
