@@ -6,7 +6,8 @@ export default function useIssueTypes() {
     queryKey: ["issue-types"],
     queryFn: async () => {
       const res = await api.get("issue/type", { withCredentials: true });
-      return res.data;
+      const filtered = res.data?.filter((item) => !item.adminOnly);
+      return filtered;
     },
     staleTime: 1000 * 60 * 5,
   });
