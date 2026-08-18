@@ -17,6 +17,7 @@ export const useSignSignature = () => {
       toast.error(
         error.response.data.error ||
           error.response.data.message ||
+          error.response.data.msg ||
           "something went wrong",
       );
     },
